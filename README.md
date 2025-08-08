@@ -2,6 +2,8 @@
 
 The ThreatIntelVisualizer project was built to demonstrate how publicly available threat intelligence data can be fetched, analyzed, and stored securely for further inspection. The goal was to leverage AlienVault’s OTX API, build a Flask-based backend, and store results using SQLite for later correlation and analysis.
 
+Purpose 
+The Threat Intel Visualizer helps users determine whether a domain (e.g., phishing.com) is associated with known malicious activity by querying the AlienVault OTX (Open Threat Exchange) platform.
 
 Skills Learned
 
