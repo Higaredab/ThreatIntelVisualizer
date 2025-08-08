@@ -33,3 +33,64 @@ Skills Learned
 
 ```bash
 http://127.0.0.1:5000/scan?domain=example.com
+
+{
+  "indicator": "example.com",
+  "pulse_info": {
+    "count": 5,
+    "pulses": [...]
+  }
+}
+
+
+2. Secure Data Storage
+
+    Created a local SQLite database with indicators table:
+
+    CREATE TABLE IF NOT EXISTS indicators (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        domain TEXT,
+        pulse_info TEXT
+    );
+
+    Data was inserted only when valid results were returned.
+
+3. Debugging & Error Handling
+
+    Ensured:
+
+        .env file is ignored using .gitignore
+
+        Errors like missing domain or API failures return structured error responses
+
+        Table mismatches were debugged and resolved with table schema updates
+
+Proactive Threat Intelligence Concepts (Future Ideas)
+
+    Add visualization using tools like Plotly, Dash, or a React frontend
+
+    Correlate indicators over time to detect recurring domains or IPs
+
+    Add support for IP, file hash, and URL-based IOCs
+
+    Explore ML models to cluster similar threat patterns
+
+Case Study: example.com
+
+    Ran a threat intel lookup on example.com
+
+    Observed pulse info associated with phishing behavior
+
+    Stored result locally for potential use in reporting or alerting logic
+
+Conclusion
+
+This project served as a gateway into the world of cyber threat intelligence. By combining Python, public APIs, and data handling, I created a tool that could be extended into a more complex analysis engine. I now better understand the processes behind:
+
+    Automated threat ingestion
+
+    Lightweight data storage
+
+    And using code to power modern SOC workflows.
+
+Future development will focus on dashboards, enrichment from additional sources, and alerting logic.
