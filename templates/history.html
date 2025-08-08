@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scan History</title>
+</head>
+<body>
+    <h1>Scan History</h1>
+
+    <from method="GET" action="/history">
+        <input type="text" name="query" placeholder="Search domain" value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    
+    <a href="/"> New Scan</a>
+
+    {% if history %}
+        <ul>
+            {% for entry in history %}
+                <li>
+                    <strong>{{ entry.domain }}</strong><br>
+                    {% if entry.pulses %}
+                        <ul>
+                            {% for pulse in entry.pulses %}
+                                <li>{{ pulse.name }} - {{ pulse.description }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        No pulses found.
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No history found yet.</p>
+    {% endif %}
+</body>
+</html>

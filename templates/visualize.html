@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pulse Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h2>Pulse Count by Domain</h2>
+    <canvas id="pulseChart" width="600" height="400"></canvas>
+
+    <script>
+        const ctx = document.getElementById('pulseChart').getContext('2d');
+        const pulseChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ domains | tojson }},
+                datasets: [{
+                    label: 'Pulse Count',
+                    data: {{ counts | tojson }},
+                    borderWidth: 1,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 }
+                    }
+                }
+            }
+        });
+    </script>
+
+    <br>
+    <a href="/">Back to Home</a>
+</body>
+</html>

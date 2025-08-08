@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ThreatIntelVisualizer</title>
+</head>
+<body>
+    <h1>Threat Intel Visualizer</h1>
+    <form action="/scan" method="POST">
+        <label for="domain">Enter Domain:</label>
+        <input type="text" name="domain" required>
+        <button type="submit">Scan</button>
+    </form>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+</body>
+</html>
