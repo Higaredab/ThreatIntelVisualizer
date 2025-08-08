@@ -1,194 +1,135 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Scan Results</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
+{% extends "base.html" %}
+{% block content %}
+<h2>🔍 Scan Results for <code>{{ domain }}</code></h2>
 
-        h2, h3 {
-            color: #2c3e50;
-        }
+<!-- Summary Card -->
+<div class="summary-card">
+  <strong>Summary:</strong><br>
+  🧠 Pulses Detected: <strong>{{ pulse_info.pulses | length }}</strong><br>
+  🧪 VT Reputation: <strong>{{ vt_data.reputation if vt_data.reputation is not none else 'N/A' }}</strong><br>
+  🚨 Abuse Confidence:
+  {% if abuse_data and abuse_data.abuseConfidenceScore is defined %}
+    <strong class="{% if abuse_data.abuseConfidenceScore >= 85 %}score-high{% elif abuse_data.abuseConfidenceScore >= 50 %}score-medium{% else %}score-low{% endif %}">
+      {{ abuse_data.abuseConfidenceScore }}
+    </strong>
+  {% else %}
+    <strong class="score-low">N/A</strong>
+  {% endif %}
+</div>
 
-        .section, .summary-card {
-            background: #fff;
-            padding: 20px;
-            margin-bottom: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
+<a class="link" href="/export_csv/{{ domain }}">📥 Export Pulses to CSV</a>
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
+<!-- OTX Section -->
+<div class="section">
+  <h3>📡 AlienVault OTX</h3>
+  {% if pulse_info.pulses %}
+    <table>
+      <tr><th>Pulse Name</th><th>Description</th></tr>
+      {% for pulse in pulse_info.pulses %}
+        <tr>
+          <td>{{ pulse.name }}</td>
+          <td>{{ pulse.description }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p class="no-data">No OTX pulses found for this domain.</p>
+  {% endif %}
+</div>
 
-        th, td {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-            text-align: left;
-        }
+<!-- VirusTotal Section -->
+<div class="section">
+  <h3>🦠 VirusTotal</h3>
+  {% if vt_data %}
+    <table>
+      <tr><th>Reputation</th><td>{{ vt_data.reputation }}</td></tr>
+      <tr><th>Categories</th>
+        <td>
+          {% if vt_data.categories %}
+            {{ vt_data.categories | join(', ') }}
+          {% else %}
+            None
+          {% endif %}
+        </td>
+      </tr>
+      <tr><th>Last Analysis Stats</th>
+        <td>
+          {% if vt_data.last_analysis_stats %}
+            <ul>
+              {% for engine, count in vt_data.last_analysis_stats.items() %}
+                <li>{{ engine }}: {{ count }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            N/A
+          {% endif %}
+        </td>
+      </tr>
+    </table>
+  {% else %}
+    <p class="no-data">No VirusTotal data available.</p>
+  {% endif %}
+</div>
 
-        .no-data {
-            color: #888;
-        }
-
-        .score-high { color: red; }
-        .score-medium { color: orange; }
-        .score-low { color: green; }
-
-        a {
-            margin-right: 15px;
-            text-decoration: none;
-            color: #2980b9;
-        }
-
-        ul {
-            padding-left: 20px;
-        }
-    </style>
-</head>
-<body>
-    <h2>🔍 Scan Results for <code>{{ domain }}</code></h2>
-
-    <!-- Summary Card -->
-    <div class="summary-card">
-        <strong>Summary:</strong><br>
-        🧠 Pulses Detected: <strong>{{ pulse_info.pulses | length }}</strong><br>
-        🧪 VT Reputation: <strong>{{ vt_data.reputation if vt_data.reputation is not none else 'N/A' }}</strong><br>
-        🚨 Abuse Confidence:
-        {% if abuse_data and abuse_data.abuseConfidenceScore is defined %}
-            <strong class="{% if abuse_data.abuseConfidenceScore >= 85 %}score-high{% elif abuse_data.abuseConfidenceScore >= 50 %}score-medium{% else %}score-low{% endif %}">
-                {{ abuse_data.abuseConfidenceScore }}
-            </strong>
-        {% else %}
-            <strong class="score-low">N/A</strong>
-        {% endif %}
-    </div>
-
-    <!-- Export Option -->
-    <a class="export-link" href="/export_csv/{{ domain }}">📥 Export Pulses to CSV</a>
-
-    <!-- OTX Section -->
-    <div class="section">
-        <h3>📡 AlienVault OTX</h3>
-        {% if pulse_info.pulses %}
-            <table>
-                <tr><th>Pulse Name</th><th>Description</th></tr>
-                {% for pulse in pulse_info.pulses %}
-                    <tr>
-                        <td>{{ pulse.name }}</td>
-                        <td>{{ pulse.description }}</td>
-                    </tr>
-                {% endfor %}
-            </table>
-        {% else %}
-            <p class="no-data">No OTX pulses found for this domain.</p>
-        {% endif %}
-    </div>
-
-    <!-- VirusTotal Section -->
-    <div class="section">
-        <h3>🦠 VirusTotal</h3>
-        {% if vt_data %}
-            <table>
-                <tr><th>Reputation</th><td>{{ vt_data.reputation }}</td></tr>
-                <tr><th>Categories</th>
-                    <td>
-                        {% if vt_data.categories %}
-                            {{ vt_data.categories | join(', ') }}
-                        {% else %}
-                            None
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr><th>Last Analysis Stats</th>
-                    <td>
-                        <ul>
-                            {% for engine, count in vt_data.last_analysis_stats.items() %}
-                                <li>{{ engine }}: {{ count }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-            </table>
-        {% else %}
-            <p class="no-data">No VirusTotal data available.</p>
-        {% endif %}
-    </div>
-
-    <!-- AbuseIPDB Section -->
-    <div class="section">
-        <h3>🚨 AbuseIPDB</h3>
-        {% if abuse_data %}
-            <table>
-                <tr><th>IP</th>
-                    <td>
-                        {% if abuse_data.ipAddress is defined %}
-                            {{ abuse_data.ipAddress }}
-                        {% else %} N/A {% endif %}
-                    </td>
-                </tr>
-                <tr><th>Confidence Score</th>
-                    <td>
-                        {% if abuse_data.abuseConfidenceScore is defined %}
-                            <span class="{% if abuse_data.abuseConfidenceScore >= 85 %}score-high{% elif abuse_data.abuseConfidenceScore >= 50 %}score-medium{% else %}score-low{% endif %}">
-                                {{ abuse_data.abuseConfidenceScore }}
-                            </span>
-                        {% else %} N/A {% endif %}
-                    </td>
-                </tr>
-                <tr><th>Total Reports</th>
-                    <td>
-                        {% if abuse_data.totalReports is defined %}
-                            {{ abuse_data.totalReports }}
-                        {% else %} N/A {% endif %}
-                    </td>
-                </tr>
-                <tr><th>Country</th>
-                    <td>
-                        {% if abuse_data.countryCode is defined %}
-                            {{ abuse_data.countryCode }}
-                        {% else %} N/A {% endif %}
-                    </td>
-                </tr>
-                <tr><th>ISP</th>
-                    <td>
-                        {% if abuse_data.isp is defined %}
-                            {{ abuse_data.isp }}
-                        {% else %} N/A {% endif %}
-                    </td>
-                </tr>
-                <tr><th>Usage Type</th>
-                    <td>
-                        {% if abuse_data.usageType is defined %}
-                            {{ abuse_data.usageType }}
-                        {% else %} N/A {% endif %}
-                    </td>
-                </tr>
-                <tr><th>Reported Domain</th>
-                    <td>
-                        {% if abuse_data.domain is defined %}
-                            {{ abuse_data.domain }}
-                        {% else %} N/A {% endif %}
-                    </td>
-                </tr>
-            </table>
-        {% else %}
-            <p class="no-data">No AbuseIPDB data or IP could not be resolved.</p>
-        {% endif %}
-    </div>
-
-    <!-- Navigation -->
-    <div>
-        <a href="/">🔍 New Scan</a>
-        <a href="/history">📜 History</a>
-        <a href="/visualize">📊 Visualize</a>
-    </div>
-</body>
-</html>
+<!-- AbuseIPDB Section -->
+<div class="section">
+  <h3>🚨 AbuseIPDB</h3>
+  {% if abuse_data %}
+    <table>
+      <tr><th>IP</th>
+        <td>
+          {% if abuse_data.ipAddress is defined %}
+            {{ abuse_data.ipAddress }}
+          {% else %} N/A {% endif %}
+        </td>
+      </tr>
+      <tr><th>Confidence Score</th>
+        <td>
+          {% if abuse_data.abuseConfidenceScore is defined %}
+            <span class="{% if abuse_data.abuseConfidenceScore >= 85 %}score-high{% elif abuse_data.abuseConfidenceScore >= 50 %}score-medium{% else %}score-low{% endif %}">
+              {{ abuse_data.abuseConfidenceScore }}
+            </span>
+          {% else %} N/A {% endif %}
+        </td>
+      </tr>
+      <tr><th>Total Reports</th>
+        <td>
+          {% if abuse_data.totalReports is defined %}
+            {{ abuse_data.totalReports }}
+          {% else %} N/A {% endif %}
+        </td>
+      </tr>
+      <tr><th>Country</th>
+        <td>
+          {% if abuse_data.countryCode is defined %}
+            {{ abuse_data.countryCode }}
+          {% else %} N/A {% endif %}
+        </td>
+      </tr>
+      <tr><th>ISP</th>
+        <td>
+          {% if abuse_data.isp is defined %}
+            {{ abuse_data.isp }}
+          {% else %} N/A {% endif %}
+        </td>
+      </tr>
+      <tr><th>Usage Type</th>
+        <td>
+          {% if abuse_data.usageType is defined %}
+            {{ abuse_data.usageType }}
+          {% else %} N/A {% endif %}
+        </td>
+      </tr>
+      <tr><th>Reported Domain</th>
+        <td>
+          {% if abuse_data.domain is defined %}
+            {{ abuse_data.domain }}
+          {% else %} N/A {% endif %}
+        </td>
+      </tr>
+    </table>
+  {% else %}
+    <p class="no-data">No AbuseIPDB data or IP could not be resolved.</p>
+  {% endif %}
+</div>
+{% endblock %}

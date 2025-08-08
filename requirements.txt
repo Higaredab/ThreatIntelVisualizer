@@ -1,0 +1,4 @@
+# Flask for building the web app backend
+# Requests for making HTTP requests to threat intel APIs
+flask
+requests
