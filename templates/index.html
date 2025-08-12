@@ -1,18 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>ThreatIntelVisualizer</title>
-</head>
-<body>
-    <h1>Threat Intel Visualizer</h1>
-    <form action="/scan" method="POST">
-        <label for="domain">Enter Domain:</label>
-        <input type="text" name="domain" required>
-        <button type="submit">Scan</button>
-    </form>
+{% extends "base.html" %}
+{% block content %}
+  <h1 class="title-overlay">Threat Intel Visualizer</h1>
 
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
-</body>
-</html>
+  <form class="search-row" action="/scan" method="post">
+    <label for="domain" style="color:#e8f1ff;">Domain:</label>
+    <input id="domain" name="domain" type="text" placeholder="e.g., example.com" required>
+    <input type="submit" value="Scan">
+  </form>
+
+  <div class="summary-card">
+    <h3>What this does</h3>
+    <ul>
+      <li>Queries AlienVault OTX for pulses</li>
+      <li>Enriches with VirusTotal (reputation, categories)</li>
+      <li>Checks AbuseIPDB for abuse/confidence</li>
+      <li>Saves results to SQLite for history and charts</li>
+    </ul>
+  </div>
+{% endblock %}
