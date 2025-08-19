@@ -1,148 +1,86 @@
-ThreatIntelVisualizer
- Professional Summary
+# 🔐 ThreatIntelVisualizer  
 
-The ThreatIntelVisualizer project was built as part of my cybersecurity engineering portfolio to demonstrate how real-world threat intelligence can be integrated into a working security tool. By combining data from AlienVault OTX, VirusTotal, and AbuseIPDB, I designed a Flask-based backend API that fetches, analyzes, and securely stores intelligence on domains and IPs in a SQLite database for further inspection.
+![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python) 
+![Flask](https://img.shields.io/badge/Flask-Backend-green?logo=flask) 
+![SQLite](https://img.shields.io/badge/SQLite-DB-lightgrey?logo=sqlite) 
+![Security](https://img.shields.io/badge/Security-Threat%20Intel-red)
 
-This repository highlights my ability to:
+## 📖 About the Project
+The **ThreatIntelVisualizer** is a cybersecurity engineering project built to demonstrate how real-world threat intelligence can be integrated into a working security tool.  
 
-Build and secure APIs
+It fetches, analyzes, and stores data on **domains and IPs** using multiple intelligence sources:
+- AlienVault OTX  
+- VirusTotal  
+- AbuseIPDB  
 
-Integrate multiple cybersecurity intelligence feeds
+This project is part of my **cybersecurity portfolio** and highlights my ability to:  
+- Build and secure REST APIs  
+- Integrate multiple cybersecurity intelligence feeds  
+- Apply defensive coding, error handling, and environment variable security  
+- Follow professional software engineering practices with Git/GitHub  
 
-Implement defensive coding, error handling, and secure environment variable management
+---
 
-Apply professional software engineering practices (Git, GitHub, documentation, and clean architecture)
-
-This project is intended to showcase my hands-on security engineering skills to recruiters and hiring managers.
-
-PURPOSE
-
-The Threat Intel Visualizer helps users determine whether a domain (e.g., phishing.com) or IP address is associated with known malicious activity by querying multiple sources:
-
-AlienVault OTX – Open Threat Exchange platform
-
-VirusTotal – Aggregated malware detection and reputation data
-
-AbuseIPDB – Community-driven IP reputation database
-
-Skills Learned
-
-Building and securing a Flask REST API
-
-Querying and parsing threat intel data from multiple APIs
-
-Writing structured results to a local SQLite database
-
-Using environment variables securely via .env
-
-Defensive coding & structured error handling
-
-Version control and collaboration with Git/GitHub
+## 🚀 Demo
+View screenshots:  
+<img width="791" height="352" alt="image" src="https://github.com/user-attachments/assets/4e8cef71-d48d-43a2-8cc4-68e773255a51" />
+<img width="811" height="610" alt="image" src="https://github.com/user-attachments/assets/6757a093-328a-4565-9a19-ac278c426786" />
+<img width="679" height="404" alt="image" src="https://github.com/user-attachments/assets/aa3a1474-c675-4d90-882e-20b3e09235e1" />
+<img width="791" height="431" alt="image" src="https://github.com/user-attachments/assets/a225a68d-ae57-4a64-afaf-2136631d2cec" />
 
 
-Tools & Technologies
+---
 
-Flask (Python micro web framework)
+## 🛠️ Tools & Technologies
+- **Flask** – Python micro web framework  
+- **AlienVault OTX API** – Open Threat Exchange threat intel  
+- **VirusTotal API** – Domain & file reputation checks  
+- **AbuseIPDB API** – Community-driven IP reputation reports  
+- **SQLite3** – Lightweight local database  
+- **dotenv** – Secure environment variable management  
+- **Requests** – Python HTTP library  
 
-AlienVault OTX API (Open Threat Exchange)
+---
 
-VirusTotal API (domain/file reputation)
+## ⚡ Features
+✅ Query multiple APIs for domains & IP addresses  
+✅ Store structured threat intel in SQLite  
+✅ Defensive error handling & validation  
+✅ REST API endpoint for lookups  
 
-AbuseIPDB API (IP abuse reports)
+---
 
-SQLite3 (lightweight embedded database)
+## 📂 Project Structure
+ThreatIntelVisualizer/
+│-- app.py
+│-- requirements.txt
+│-- .env.example
+│-- /db
+│-- /images
+│-- /docs
 
-Requests (Python HTTP library)
 
-dotenv (environment variable management)
+---
 
-Visual Studio Code + GitHub (development & version control)
+## 🧠 Skills Demonstrated
+- Cyber Threat Intelligence Integration  
+- Secure API Development  
+- Structured Data Storage & Retrieval  
+- Defensive Programming & Error Handling  
+- Professional Git/GitHub Workflow  
 
-⚙ Project Setup
-Environment Setup
-git clone https://github.com/<your-username>/ThreatIntelVisualizer.git
-cd ThreatIntelVisualizer
-python -m venv venv
-venv\Scripts\activate   # (Windows)
-pip install -r requirements.txt
+---
 
-2. Create .env file
-OTX_API_KEY=your_otx_key_here
-VT_API_KEY=your_virustotal_key_here
-ABUSEIPDB_API_KEY=your_abuseipdb_key_here
+## 🔮 Future Improvements
+- Add visualization dashboards (Plotly, Dash, or React frontend)  
+- Expand support for file hashes & URLs  
+- Enrich with additional threat intel feeds  
+- Implement alerting & correlation logic  
 
-3. RUN FLASK API
-   python. app.py
+---
 
-4. EXAMPLE REQUEST
-   http://127.0.0.1:5000/scan?domain=example.com
-
-  Sample Response
-  {
-  "indicator": "example.com",
-  "otx": { "pulse_count": 5, "tags": [...] },
-  "virustotal": { "malicious_votes": 3, "harmless_votes": 57 },
-  "abuseipdb": { "totalReports": 12, "abuseConfidenceScore": 90 }
-}
-
-Database 
-SQLITE table:
-CREATE TABLE IF NOT EXISTS indicators (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    domain TEXT,
-    otx_data TEXT,
-    vt_data TEXT,
-    abuseipdb_data TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-DEFENSIVE FEATURES
-.env and secrets excluded via .gitignore
-
-Structured JSON error responses for API failures
-
-Prevents duplicate entries unless results are valid
-
-Clear logging for debugging
-
-Future Improvements
-
-Interactive dashboard with Plotly/Dash or React frontend
-
-Support for IPs, file hashes, and URLs as inputs
-
-Correlation of recurring indicators over time
-
-ML clustering of similar threats
-
-Automated alerts (Slack/Email) for malicious hits
-
-Case Study Example
-
-Scanned example.com:
-
-Flagged as associated with phishing activity (via OTX & AbuseIPDB)
-
-VirusTotal showed mixed reputation
-
-Result stored locally in SQLite for reporting
-
-Conclusion
-
-This project showcases:
-
-API integration skills (OTX, VirusTotal, AbuseIPDB)
-
-Backend development with Flask
-
-Database design and secure storage
-
-Practical SOC workflows for cyber threat intelligence
-
-It serves as a strong foundation for building more advanced cybersecurity automation and visualization platforms.
-
-Demo
-
+## 📜 License
+MIT License © 2025 Brian Higareda
 
 
 
