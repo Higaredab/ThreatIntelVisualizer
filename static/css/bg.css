@@ -1,0 +1,31 @@
+/* static/css/bg.css */
+
+/* Particle background container */
+#bg-particles {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: radial-gradient(700px 500px at 15% 20%, rgba(5, 120, 255, 0.08), transparent 60%),
+              radial-gradient(800px 600px at 85% 80%, rgba(0, 200, 255, 0.06), transparent 60%),
+              #071524;
+}
+
+/* Title overlay styling for readability */
+.title-overlay {
+  background: rgba(7, 17, 33, 0.65); /* dark semi-transparent background */
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: #ffffff; /* pure white */
+  font-weight: bold;
+  text-shadow: 
+    0 0 6px rgba(42, 167, 255, 0.8), /* blue glow */
+    0 2px 4px rgba(0, 0, 0, 0.9);    /* dark shadow */
+  display: inline-block;
+}
+
+/* Keep summary card headers dark for readability */
+.summary-card h3 {
+  color: #1b2a3a; /* dark text for light backgrounds */
+  text-shadow: none;
+}
+

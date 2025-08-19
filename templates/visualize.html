@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Visualize{% endblock %}
+{% block content %}
+<div class="container" style="max-width:1100px;">
+  <h1 class="mt-3 mb-4">Visualize</h1>
+  {% if demo_mode %}
+    <div class="alert alert-warning">Demo Mode: using sample data — external API calls are disabled.</div>
+  {% endif %}
+
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="m-0">Pulses per domain (top)</h5>
+        <span id="modeBadge" class="badge text-bg-secondary">...</span>
+      </div>
+      <canvas id="vizCanvas" height="130"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+<script>
+(async function () {
+  const res = await fetch('/api/visualize-data');
+  const data = await res.json();
+  document.getElementById('modeBadge').textContent = data.mode === 'demo' ? 'Demo' : 'Live';
+
+  const labels = data.pulses_per_domain.map(x => x.domain);
+  const values = data.pulses_per_domain.map(x => x.pulses);
+
+  const ctx = document.getElementById('vizCanvas').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets: [{ label: 'Pulses', data: values }] },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => ` ${c.parsed.y} pulses` } }
+      },
+      scales: {
+        y: { beginAtZero: true, ticks: { precision: 0 } }
+      }
+    }
+  });
+})();
+</script>
+{% endblock %}
